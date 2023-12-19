@@ -11,6 +11,8 @@ A plain implementation is in [plain Lamport one-time signature](one-time-sig.py)
 
 An improved implementation is in [improved k-Lamport one-time signature](improved-one-time-signature.py).
 
+A Latex write up is in [Latex Write-up](co485FinalProject.pdf).
+
 ### Key Generation
 A one-time signature scheme involves the generation of a public-private key pair. The public key is used for verification, while the private key is used for signing.
 Unlike traditional digital signature schemes, the private key in a one-time signature scheme is only valid for a single signature.
