@@ -7,6 +7,10 @@ One-time signature scheme was initially developed by Lamport and subsequently en
 
 Simply speaking, the message signer generates a random number $r$ which serves as a one-time private key. Then signer hashes it though an one-way hash function, $h$ to generate the public key $pk = h(r)$. To sign a message $m$, the random private key is used to choose from according to the message $\{0,1\}$ bit, $s = r \oplus m$. When a receiver gets $(m, s)$, if  $h(m \oplus h(r)) = s$, the receiver can verify this signature is from the signer.
 
+A plain implementation is in [plain Lamport one-time signature](one-time-sig.py).
+
+An improved implementation is in [improved k-Lamport one-time signature](improved-one-time-signature.py).
+
 ### Key Generation
 A one-time signature scheme involves the generation of a public-private key pair. The public key is used for verification, while the private key is used for signing.
 Unlike traditional digital signature schemes, the private key in a one-time signature scheme is only valid for a single signature.
