@@ -1,9 +1,10 @@
 import hashlib
 import os
+import sys
 
 def hash_message(message):
     """Hashes a message using SHA-256."""
-    return hashlib.sha256(message.encode()).hexdigest()
+    return hashlib.sha256(message).digest()
 
 def key_generation():
     """Generates a key pair for Lamport one-time signature."""
@@ -13,32 +14,29 @@ def key_generation():
 
 def sign(private_key, message):
     """Signs a message using Lamport one-time signature."""
-    if len(message) != 256:
-        raise ValueError("Message length must be 256 bits")
-
-    signature = [private_key[i][int(message[i], 16)] for i in range(256)]
+    signature = [private_key[i][int.from_bytes(hash_message(message),sys.byteorder) >> i & 1] for i in range(256)]
     return signature
 
 def verify(public_key, message, signature):
-    """Verifies a signature using Lamport one-time signature."""
-    if len(message) != 256:
-        raise ValueError("Message length must be 256 bits")
-
-    reconstructed_hash = [hash_message(public_key[i][int(message[i], 16)]) for i in range(256)]
-    return signature == reconstructed_hash
+    signature_hash = [hash_message(signature[i]) for i in range(256)]
+    public_key_hash = [public_key[i][int.from_bytes(hash_message(message),sys.byteorder) >> i & 1] for i in range(256)]
+    
+    return signature_hash == public_key_hash
 
 def run_lamport_signature():
     # Example usage of the Lamport one-time signature scheme
-    message = "0123456789ABCDEF"  # 256-bit message in hexadecimal
+    message = b'I am a byte string'   #byte string
 
     # Key generation
     private_key, public_key = key_generation()
 
     # Signing
     signature = sign(private_key, message)
+    fake_signature = sign(private_key, b'fake message')
 
     # Verification
     is_verified = verify(public_key, message, signature)
+    fake_verficiation = verify(public_key, message, fake_signature)
 
     # Output results
     print("Message:", message)
@@ -46,6 +44,7 @@ def run_lamport_signature():
     print("Public Key:", public_key)
     print("Signature:", signature)
     print("Verification Result:", is_verified)
+    print("Fake Verification Result:", fake_verficiation)
 
 if __name__ == "__main__":
     run_lamport_signature()
