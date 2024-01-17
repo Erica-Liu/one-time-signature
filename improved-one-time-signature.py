@@ -13,7 +13,7 @@ def improved_k_key_generation(k,l):
     private_key = [[os.urandom(32) for _ in range(k)] for _ in range(l)]  # Each element is a pair of l-length k-bit strings
     public_key = [[hash_message(private_key[i][j]) for j in range(k)] for i in range(l)]
     return private_key, public_key
-    
+
 def finding_logk_bit_idx(m, k, l):
     bit_group_num = int (math.log2(k))
     logk_bits = [0 for _ in range(l)]
@@ -47,17 +47,17 @@ def improved_k_verify(public_key, message, signature, k, l):
     return signature_hash == public_key_hash
 
 
-def run_k_lamport_signature():
+def run_k_lamport_signature(k=4):
     # Example usage of the improved k-Lamport one-time signature scheme
-    k = 16
     l = 16
     message = b'I am a byte string'  # 16-k-bit message in hexadecimal
+    
     # Key generation
     private_key, public_key = improved_k_key_generation(k,l)
 
     # Signing
     signature = improved_k_sign(private_key, message, k, l)
-    fake_signature = improved_k_sign(private_key, b'fake message', k, l)
+    fake_signature = improved_k_sign(private_key, b'for fake signature', k, l)
 
     # Verification
     is_verified = improved_k_verify(public_key, message, signature, k, l)
@@ -66,12 +66,17 @@ def run_k_lamport_signature():
     fake_verficiation = improved_k_verify(public_key, message, fake_signature, k, l)
 
     # Output results
+    print("====Run K={",k,"}-Lamport Signature====")
+
     print("Message:", message)
     print("Private Key:", private_key)
     print("Public Key:", public_key)
     print("Signature:", signature)
     print("Verification Result:", is_verified)
+
+    print("Fake Signature:", fake_signature)
     print("Fake Verification Result:", fake_verficiation)
 
 if __name__ == "__main__":
-    run_k_lamport_signature()
+    k = input("enter a k, the improved length of hash function, which should be a power of 2: ")
+    run_k_lamport_signature(int(k))
