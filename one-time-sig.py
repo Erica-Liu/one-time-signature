@@ -14,10 +14,12 @@ def key_generation():
 
 def sign(private_key, message):
     """Signs a message using Lamport one-time signature."""
+
     signature = [private_key[i][int.from_bytes(hash_message(message),sys.byteorder) >> i & 1] for i in range(256)]
     return signature
 
 def verify(public_key, message, signature):
+
     signature_hash = [hash_message(signature[i]) for i in range(256)]
     public_key_hash = [public_key[i][int.from_bytes(hash_message(message),sys.byteorder) >> i & 1] for i in range(256)]
     
@@ -39,11 +41,14 @@ def run_lamport_signature():
     fake_verficiation = verify(public_key, message, fake_signature)
 
     # Output results
+    print("====Run Plain Lamport Signature Scheme ====")
     print("Message:", message)
     print("Private Key:", private_key)
     print("Public Key:", public_key)
     print("Signature:", signature)
     print("Verification Result:", is_verified)
+    
+    print("\nFake Signature:", fake_signature)
     print("Fake Verification Result:", fake_verficiation)
 
 if __name__ == "__main__":
